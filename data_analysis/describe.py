@@ -5,6 +5,7 @@ import sys
 
 def ft_describe(data):
     numerical_cols = data.select_dtypes(include=[np.number]).columns
+    numerical_cols = numerical_cols[1:]
     result = pd.DataFrame(index=['Count', 'Mean', 'Std', 'Min', '25%', '50%', '75%', 'Max'])
 
     for column in numerical_cols:
