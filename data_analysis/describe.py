@@ -30,7 +30,7 @@ def main():
         # print ft_describe
         print(ft_describe(data))
 
-    except FileNotFoundError:
+    except:
         print("Error: Invalid file.")
         exit(1)
 
