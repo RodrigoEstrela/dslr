@@ -1,75 +1,45 @@
+from sklearn.linear_model import LogisticRegression
+import pandas as pd
 import numpy as np
 
-def sigmoid(z):
-    """Sigmoid function."""
-    return 1 / (1 + np.exp(-z))
+def house_from_index(index):
+    if index == 0:
+        return "Ravenclaw"
+    elif index == 1:
+        return "Slytherin"
+    elif index == 2:
+        return "Gryffindor"
+    elif index == 3:
+        return "Hufflepuff"
 
-def compute_cost(theta, X, y):
-    """Compute the cost (loss) for logistic regression."""
-    m = len(y)
-    h = sigmoid(X @ theta)
-    cost = -1/m * np.sum(y * np.log(h) + (1 - y) * np.log(1 - h))
-    return cost
+def sklearn_test(data_path):
+    # Load training data
+    train_data = pd.read_csv('datasets/dataset_train.csv')
+    X_train = train_data.iloc[:, 6:18].values
+    X_train = np.nan_to_num(X_train)
+    y_train = train_data.iloc[:, 1].values
+    y_train = np.array([0 if label == 'Ravenclaw' else 1 if label == 'Slytherin' else 2 if label == 'Gryffindor' else 3 for label in y_train])
 
-def gradient_descent(X, y, theta, learning_rate, num_iterations):
-    """Gradient Descent to optimize theta."""
-    m = len(y)
-    cost_history = []
+    # Load test data
+    test_data = pd.read_csv(data_path)
+    X_test = test_data.iloc[:, 6:18].values
+    X_test = np.nan_to_num(X_test)
+    y_test = test_data.iloc[:, 1].values
+    y_test = np.array([0 if label == 'Ravenclaw' else 1 if label == 'Slytherin' else 2 if label == 'Gryffindor' else 3 for label in y_test])
 
-    for _ in range(num_iterations):
-        h = sigmoid(X @ theta)
-        gradient = X.T @ (h - y) / m
-        theta -= learning_rate * gradient
+    # Create and train the model
+    model = LogisticRegression(max_iter=10000)
+    model.fit(X_train, y_train)
 
-        cost = compute_cost(theta, X, y)
-        cost_history.append(cost)
+    # Make predictions on the test data
+    y_pred = model.predict(X_test)
+    y_pred = np.array([house_from_index(index) for index in y_pred])
 
-    return theta, cost_history
+    # Create a DataFrame with the predictions
+    results = pd.DataFrame({
+        'Index': range(len(y_pred)),
+        'Hogwarts House': y_pred
+    })
 
-def train_logistic_regression(X, y, num_classes, learning_rate, num_iterations):
-    """Train logistic regression models for each class using one-vs-all strategy."""
-    theta_models = {}
-
-    for i in range(num_classes):
-        # Convert y to binary for the current class
-        y_binary = (y == i).astype(int)
-
-        # Initialize theta with zeros
-        theta = np.zeros(X.shape[1])
-
-        # Train logistic regression for the current class
-        theta, _ = gradient_descent(X, y_binary, theta, learning_rate, num_iterations)
-
-        theta_models[i] = theta
-
-    return theta_models
-
-def predict(X, theta_models):
-    """Make predictions using the trained models."""
-    probabilities = np.array([sigmoid(X @ theta) for theta in theta_models.values()]).T
-    predictions = np.argmax(probabilities, axis=1)
-    return predictions
-
-# Example usage
-# Assume X_train and y_train are your feature matrix and target variable
-# Make sure to add a column of ones to X_train for the bias term
-
-# Hyperparameters
-learning_rate = 0.01
-num_iterations = 1000
-num_classes = 4
-
-# Add a column of ones for the bias term
-X_train_bias = np.c_[np.ones((X_train.shape[0], 1)), X_train]
-
-# Train logistic regression models
-theta_models = train_logistic_regression(X_train_bias, y_train, num_classes, learning_rate, num_iterations)
-
-# Make predictions on test set
-X_test_bias = np.c_[np.ones((X_test.shape[0], 1)), X_test]
-predictions = predict(X_test_bias, theta_models)
-
-# Evaluate the model
-accuracy = np.mean(predictions == y_test)
-print(f"Accuracy: {accuracy}")
-
+    # Write the DataFrame to a CSV file
+    results.to_csv('houses2.csv', index=False)
