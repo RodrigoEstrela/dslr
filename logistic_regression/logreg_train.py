@@ -12,15 +12,13 @@ def sigmoid(z):
 def gradient_descent(X, y, theta, learning_rate, num_iterations):
     """Gradient Descent to optimize theta."""
     m = len(y)
-    # print first row of X
 
-    
     for _ in range(num_iterations):
         h = sigmoid(theta @ X.T)
         gradient = X.T @ (h - y) / m
 
         theta -= learning_rate * gradient
-
+        #theta -= gradient
     return theta
 
 def train_logistic_regression(X, y, num_classes, learning_rate, num_iterations):
@@ -47,6 +45,7 @@ def save_theta_models(theta_models, filename):
 if __name__ == "__main__":
     # Load the data
     df = pd.read_csv('datasets/dataset_train.csv')
+    #df = pd.read_csv('../multilayer-perceptron/train.csv')
     # preprocessing
     X = df.iloc[:, 6:18].values
     y = df.iloc[:, 1].values
@@ -58,10 +57,10 @@ if __name__ == "__main__":
     scaler = MinMaxScaler()
     X = scaler.fit_transform(X)
     # Hyperparameters
-    learning_rate = 9.9
+    learning_rate = 1
     num_iterations = 1000
     num_classes = 4
     # Train the models
     theta_models = train_logistic_regression(X, y, num_classes, learning_rate, num_iterations)
-    # Save the models
+    # Save the models' weights
     save_theta_models(theta_models, 'theta.csv')

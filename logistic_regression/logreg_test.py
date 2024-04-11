@@ -19,6 +19,7 @@ def house_from_index(index):
 if __name__ == "__main__":
     # Load test data
     data = pd.read_csv('datasets/dataset_test.csv')
+    #data = pd.read_csv('../multilayer-perceptron/test.csv')
     # preprocessing
     X = data.iloc[:, 6:18].values
     X = np.nan_to_num(X)
@@ -28,7 +29,7 @@ if __name__ == "__main__":
     y_test = np.array([0 if label == 'Ravenclaw' 
                        else 1 if label == 'Slytherin' 
                        else 2 if label == 'Gryffindor' 
-                       else 3 for label in y_test]) # Huffelpuff
+                       else 3 for label in y_test]) # Hufflepuff
 
     # Load the weights
     theta1 = pd.read_csv('theta.csv').values[:, 0]
@@ -46,9 +47,12 @@ if __name__ == "__main__":
     # Save the predictions to a file in the format index, prediction
     pd.DataFrame({'Index': range(len(predictions)), 'Hogwarts House': predictions}).to_csv('houses.csv', index=False)
 
+    
     # Compare with sklearn
     sklearn_test('datasets/dataset_test.csv')
+    #sklearn_test('../multilayer-perceptron/test.csv')
     sklearn_predictions = pd.read_csv('houses2.csv').iloc[:, 1].values
 
     # Print the accuracy of the model
     print("Accuracy:", accuracy_score(predictions, sklearn_predictions))
+    
