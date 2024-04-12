@@ -10,8 +10,13 @@ if __name__ == "__main__":
         pairplot = sns.pairplot(df, hue='Hogwarts House', diag_kind='hist')
         pairplot.set(xticklabels=[], yticklabels=[])
         for ax in pairplot.axes.flatten():
-            ax.tick_params(axis='both', which='major', labelsize=1)
-        plt.setp(pairplot._legend.get_texts(), fontsize='6')
+             # Change the size of the x-axis labels
+            xlabel = ax.get_xlabel()
+            ax.set_xlabel(xlabel, fontsize=8.5)
+            # Change the size of the y-axis labels
+            ylabel = ax.get_ylabel()
+            ax.set_ylabel(ylabel, fontsize=5)
+        plt.setp(pairplot._legend.get_texts(), fontsize='8')
         plt.setp(pairplot._legend.get_title(), fontsize='8')
         plt.show()
     except FileNotFoundError:

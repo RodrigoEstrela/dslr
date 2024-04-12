@@ -18,7 +18,6 @@ def gradient_descent(X, y, theta, learning_rate, num_iterations):
         gradient = X.T @ (h - y) / m
 
         theta -= learning_rate * gradient
-        #theta -= gradient
     return theta
 
 def train_logistic_regression(X, y, num_classes, learning_rate, num_iterations):
