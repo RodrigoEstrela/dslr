@@ -7,8 +7,12 @@ if __name__ == "__main__":
     try:
         df = pd.read_csv('datasets/dataset_train.csv')
         df = df.drop(columns=['Index'])
-        df = df.select_dtypes(include=[float, int])
-        sns.pairplot(df)
+        pairplot = sns.pairplot(df, hue='Hogwarts House', diag_kind='hist')
+        pairplot.set(xticklabels=[], yticklabels=[])
+        for ax in pairplot.axes.flatten():
+            ax.tick_params(axis='both', which='major', labelsize=1)
+        plt.setp(pairplot._legend.get_texts(), fontsize='6')
+        plt.setp(pairplot._legend.get_title(), fontsize='8')
         plt.show()
     except FileNotFoundError:
         print("Error: Invalid file.")
