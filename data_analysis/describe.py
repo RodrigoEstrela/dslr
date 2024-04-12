@@ -37,14 +37,14 @@ def ft_describe(data):
     for column in numerical_cols:
         data[column] = data[column].fillna(data[column].mean())
         result[column] = [
-            data[column].notnull().sum(),
-            sum(data[column]) / len(data[column]),
-            std(data[column]),
-            min(data[column]),
-            quantile(data[column], 0.25),
-            quantile(data[column], 0.5),
-            quantile(data[column], 0.75),
-            max(data[column])
+            data[column].notnull().sum(), # num of lines
+            sum(data[column]) / len(data[column]), # mean
+            std(data[column]), # standard deviation
+            min(data[column]), # minimum value
+            quantile(data[column], 0.25), # 25th percentile
+            quantile(data[column], 0.5), # 50th percentile 
+            quantile(data[column], 0.75), # 75th percentile
+            max(data[column]) # maximum value
         ]
     return result
 

@@ -6,11 +6,10 @@ from matplotlib.patches import Patch
 
 def histogram(data, course_cols, house_cols):
     num_features = len(course_cols)
-    num_categories = len(data[house_cols].unique())
     categories = data[house_cols].unique()
 
 
-    fig, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(8, 3 * num_features))
+    _, axes = plt.subplots(nrows=num_features, ncols=1, figsize=(8, 3 * num_features))
 
     counter = 0
     for i, feature_column in enumerate(course_cols):
@@ -31,10 +30,11 @@ def histogram(data, course_cols, house_cols):
 
 def main():
     try:
+        # Load the dataset and select numerical features
         data = pd.read_csv("datasets/dataset_train.csv")
         course_cols = data.select_dtypes(include=[np.number]).columns
         course_cols = course_cols[1:]
-
+        # Plot the histogram
         house_column = data.columns[1]
         histogram(data, course_cols, house_column)
     except FileNotFoundError:
