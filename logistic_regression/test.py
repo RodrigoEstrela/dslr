@@ -16,7 +16,7 @@ def house_from_index(index):
 def sklearn_test(data_path):
     # Load training data
     train_data = pd.read_csv('datasets/dataset_train.csv')
-    #train_data = pd.read_csv('../multilayer-perceptron/train.csv')
+    #train_data = pd.read_csv('datasets/train.csv') # to use csv from splitter
     X_train = train_data.iloc[:, 6:18].values
     X_train = np.nan_to_num(X_train)
     scaler = MinMaxScaler()
@@ -57,4 +57,4 @@ def sklearn_test(data_path):
 
 if __name__ == '__main__':
     sklearn_test('datasets/dataset_train.csv')
-    #sklearn_test('../multilayer-perceptron/train.csv')
+    #sklearn_test('datasets/train.csv') # to use csv from splitter

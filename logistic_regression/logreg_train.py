@@ -12,11 +12,9 @@ def sigmoid(z):
 def gradient_descent(X, y, theta, learning_rate, num_iterations):
     """Gradient Descent to optimize theta."""
     m = len(y)
-
     for _ in range(num_iterations):
         h = sigmoid(theta @ X.T)
         gradient = X.T @ (h - y) / m
-
         theta -= learning_rate * gradient
     return theta
 
@@ -44,7 +42,7 @@ def save_theta_models(theta_models, filename):
 if __name__ == "__main__":
     # Load the data
     df = pd.read_csv('datasets/dataset_train.csv')
-    #df = pd.read_csv('../multilayer-perceptron/train.csv')
+    #df = pd.read_csv('datasets/train.csv') # to use csv from splitter
     # preprocessing
     X = df.iloc[:, 6:18].values
     y = df.iloc[:, 1].values
@@ -53,7 +51,7 @@ if __name__ == "__main__":
                   else 2 if label == 'Gryffindor' 
                   else 3 for label in y]) # Huffelpuff
     X = np.nan_to_num(X)
-    scaler = MinMaxScaler()
+    scaler = MinMaxScaler(copy=False)
     X = scaler.fit_transform(X)
     # Hyperparameters
     learning_rate = 1

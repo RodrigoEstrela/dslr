@@ -19,7 +19,7 @@ def house_from_index(index):
 if __name__ == "__main__":
     # Load test data
     data = pd.read_csv('datasets/dataset_test.csv')
-    #data = pd.read_csv('../multilayer-perceptron/test.csv')
+    #data = pd.read_csv('datasets/test.csv') # to use csv from splitter
     # preprocessing
     X = data.iloc[:, 6:18].values
     X = np.nan_to_num(X)
@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     # for each row in X_test, calculate the probability of each class
     probabilities = np.array([sigmoid(X @ theta) for theta in [theta1, theta2, theta3, theta4]]).T
-    
+
     # for each row in X_test, predict the class with the highest probability
     predictions = np.argmax(probabilities, axis=1)
     predictions = np.array([house_from_index(index) for index in predictions])
@@ -50,9 +50,8 @@ if __name__ == "__main__":
     
     # Compare with sklearn
     sklearn_test('datasets/dataset_test.csv')
-    #sklearn_test('../multilayer-perceptron/test.csv')
+    #sklearn_test('datasets/test.csv') # to use csv from splitter
     sklearn_predictions = pd.read_csv('houses2.csv').iloc[:, 1].values
 
     # Print the accuracy of the model
     print("Accuracy:", accuracy_score(predictions, sklearn_predictions))
-    
